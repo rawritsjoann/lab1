@@ -218,7 +218,7 @@ void check_mouse(XEvent *e, Game *game)
 	savex = e->xbutton.x;
 	savey = e->xbutton.y;
 	game->lastMouse[0] = savex;
-	game->lastMouse[1] = savey;
+	game->lastMouse[1] = WINDOW_HEIGHT - savey;
 	if (++n < 10)
 	    return;
 	int y = WINDOW_HEIGHT - e->xbutton.y;
