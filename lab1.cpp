@@ -84,6 +84,9 @@ struct Game {
             box[i].center.y = 500 - i*60;
         }
         //declare a circle shape
+	circle.radius = 125.0;
+	circle.center.x = 600;
+	circle.center.y = 50;
     }
 
 };
@@ -283,6 +286,15 @@ void movement(Game *game)
         }
 
         //collision with circle
+	float d0,d1,dist;
+	d0 = p->s.center.x - game->circle.center.x;
+	d1 = p->s.center.y - game->circle.center.y;
+	dist = sqrt(d0*d0 + d1*d1);
+	if(dist < game->circle.radius) {
+	    //collision! apply penalty to the particle
+	    p->velocity.x += d0/dist;
+	    p->velocity.y += d1/dist;
+	}
 
         //check for off-screen
         if (p->s.center.y < 0.0) {
@@ -305,7 +317,6 @@ void render(Game *game)
     glColor3ub(90,140,90);
     for(int i = 0; i < 5 ; i++){
         s = &game->box[i];
-
         glPushMatrix();
         glTranslatef(s->center.x, s->center.y, s->center.z);
         w = s->width;
@@ -320,6 +331,25 @@ void render(Game *game)
     }
 
     //draw circle
+    const int n=40;
+    static Vec vert[n];
+    static int firsttime = 1;
+    if(firsttime) {
+	float ang = 0.0, inc = (3.14159 * 2.0) / (float)n;
+	for(int i = 0; i < n; i++) {
+	    vert[i].x = cos(ang) * game->circle.radius;
+	    vert[i].y = sin(ang) * game->circle.radius;
+	    ang += inc;
+	}
+	firsttime = 0;
+    }
+    glBegin(GL_LINE_LOOP);
+    for(int i = 0; i < n; i++) {
+    	glVertex2i(game->circle.center.x + vert[i].x,
+		game->circle.center.y + vert[i].y);
+    }
+    glEnd();
+
 
     //draw all particles here
     glPushMatrix();
