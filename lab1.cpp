@@ -84,9 +84,9 @@ struct Game {
             box[i].center.y = 500 - i*60;
         }
         //declare a circle shape
-	circle.radius = 125.0;
-	circle.center.x = 600;
-	circle.center.y = 50;
+        circle.radius = 125.0;
+        circle.center.x = 600;
+        circle.center.y = 50;
     }
 
 };
@@ -274,11 +274,16 @@ void movement(Game *game)
 
         //collision with box
         for(int j = 0; j < 5; j++) {
-            if( p->s.center.x >= game->box[j].center.x - game->box[j].width &&
-                    p->s.center.x <= game->box[j].center.x + game->box[j].width &&
-                    p->s.center.y < game->box[j].center.y + game->box[j].height &&
-                    p->s.center.y > game->box[j].center.y - game->box[j].height) {
-                p->s.center.y = game->box[j].center.y + game->box[j].height + 0.1;
+            if( p->s.center.x >= game->box[j].center.x - 
+                    game->box[j].width &&
+                    p->s.center.x <= game->box[j].center.x + 
+                    game->box[j].width &&
+                    p->s.center.y < game->box[j].center.y + 
+                    game->box[j].height &&
+                    p->s.center.y > game->box[j].center.y - 
+                    game->box[j].height) {
+                p->s.center.y = game->box[j].center.y + 
+                    game->box[j].height + 0.1;
                 p->velocity.y *= rnd() * -0.5;
                 p->velocity.x *= 1.05;
                 p->s.center.y += 1.0;
@@ -286,15 +291,15 @@ void movement(Game *game)
         }
 
         //collision with circle
-	float d0,d1,dist;
-	d0 = p->s.center.x - game->circle.center.x;
-	d1 = p->s.center.y - game->circle.center.y;
-	dist = sqrt(d0*d0 + d1*d1);
-	if(dist < game->circle.radius) {
-	    //collision! apply penalty to the particle
-	    p->velocity.x += d0/dist;
-	    p->velocity.y += d1/dist;
-	}
+        float d0,d1,dist;
+        d0 = p->s.center.x - game->circle.center.x;
+        d1 = p->s.center.y - game->circle.center.y;
+        dist = sqrt(d0*d0 + d1*d1);
+        if(dist < game->circle.radius) {
+            //collision! apply penalty to the particle
+            p->velocity.x += d0/dist;
+            p->velocity.y += d1/dist;
+        }
 
         //check for off-screen
         if (p->s.center.y < 0.0) {
@@ -335,18 +340,18 @@ void render(Game *game)
     static Vec vert[n];
     static int firsttime = 1;
     if(firsttime) {
-	float ang = 0.0, inc = (3.14159 * 2.0) / (float)n;
-	for(int i = 0; i < n; i++) {
-	    vert[i].x = cos(ang) * game->circle.radius;
-	    vert[i].y = sin(ang) * game->circle.radius;
-	    ang += inc;
-	}
-	firsttime = 0;
+        float ang = 0.0, inc = (3.14159 * 2.0) / (float)n;
+        for(int i = 0; i < n; i++) {
+            vert[i].x = cos(ang) * game->circle.radius;
+            vert[i].y = sin(ang) * game->circle.radius;
+            ang += inc;
+        }
+        firsttime = 0;
     }
     glBegin(GL_LINE_LOOP);
     for(int i = 0; i < n; i++) {
-    	glVertex2i(game->circle.center.x + vert[i].x,
-		game->circle.center.y + vert[i].y);
+        glVertex2i(game->circle.center.x + vert[i].x,
+                game->circle.center.y + vert[i].y);
     }
     glEnd();
 
