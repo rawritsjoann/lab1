@@ -268,24 +268,20 @@ void movement(Game *game)
         p->s.center.y += p->velocity.y;
         p->velocity.y -= GRAVITY;
 
-
         //check for collision with shapes...
         //Shape *s;
 
         //collision with box
         for(int j = 0; j < 5; j++) {
-            if( p->s.center.x >= game->box[j].center.x - 
-                    game->box[j].width &&
+            if( p->s.center.x >= game->box[j].center.x - game->box[j].width &&
                     p->s.center.x <= game->box[j].center.x + 
-                    game->box[j].width &&
+		    	game->box[j].width &&
                     p->s.center.y < game->box[j].center.y + 
-                    game->box[j].height &&
+                    	game->box[j].height &&
                     p->s.center.y > game->box[j].center.y - 
-                    game->box[j].height) {
-                p->s.center.y = game->box[j].center.y + 
-                    game->box[j].height + 0.1;
+                    	game->box[j].height) {
                 p->velocity.y *= rnd() * -0.5;
-                p->velocity.x *= 1.05;
+                p->velocity.x *= 1.03;
                 p->s.center.y += 1.0;
             }
         }
@@ -296,6 +292,12 @@ void movement(Game *game)
         d1 = p->s.center.y - game->circle.center.y;
         dist = sqrt(d0*d0 + d1*d1);
         if(dist < game->circle.radius) {
+	    //move particle to circle edge
+	    p->s.center.x = game->circle.center.x + (d0/dist) * 
+		game->circle.radius * 1.01;
+	    p->s.center.y = game->circle.center.y + (d1/dist) * 
+		game->circle.radius * 1.01;
+
             //collision! apply penalty to the particle
             p->velocity.x += d0/dist;
             p->velocity.y += d1/dist;
