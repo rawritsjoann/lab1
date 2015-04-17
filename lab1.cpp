@@ -79,13 +79,13 @@ struct Game {
         //declare a box shape
         for(int i = 0; i < 5; i++){
             box[i].width = 100;
-            box[i].height = 10;
+            box[i].height = 12;
             box[i].center.x = 120 + i*65;
             box[i].center.y = 500 - i*60;
         }
         //declare a circle shape
-        circle.radius = 125.0;
-        circle.center.x = 600;
+        circle.radius = 150.0;
+        circle.center.x = 525;
         circle.center.y = 50;
     }
 
@@ -280,9 +280,10 @@ void movement(Game *game)
                     	game->box[j].height &&
                     p->s.center.y > game->box[j].center.y - 
                     	game->box[j].height) {
+                p->s.center.y = game->box[j].center.y + game->box[j].height +
+		    1.01;
+                p->velocity.x *= 1.01;
                 p->velocity.y *= rnd() * -0.5;
-                p->velocity.x *= 1.03;
-                p->s.center.y += 1.0;
             }
         }
 
@@ -294,13 +295,13 @@ void movement(Game *game)
         if(dist < game->circle.radius) {
 	    //move particle to circle edge
 	    p->s.center.x = game->circle.center.x + (d0/dist) * 
-		game->circle.radius * 1.01;
+		game->circle.radius + 1.01;
 	    p->s.center.y = game->circle.center.y + (d1/dist) * 
-		game->circle.radius * 1.01;
+		game->circle.radius + 1.01;
 
             //collision! apply penalty to the particle
-            p->velocity.x += d0/dist;
-            p->velocity.y += d1/dist;
+            p->velocity.x *= 1.01;
+            p->velocity.y *= rnd() * -0.5;
         }
 
         //check for off-screen
@@ -350,7 +351,7 @@ void render(Game *game)
         }
         firsttime = 0;
     }
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_TRIANGLE_FAN);
     for(int i = 0; i < n; i++) {
         glVertex2i(game->circle.center.x + vert[i].x,
                 game->circle.center.y + vert[i].y);
