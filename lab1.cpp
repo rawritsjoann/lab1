@@ -183,6 +183,8 @@ void init_opengl(void)
     glOrtho(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT, -1, 1);
     //Set the screen background color
     glClearColor(0.1, 0.1, 0.1, 1.0);
+    glEnable(GL_TEXTURE_2D);
+    initialize_fonts();
 }
 
 #define rnd() (float)rand() / (float)RAND_MAX
@@ -343,14 +345,19 @@ void render(Game *game)
         glEnd();
         glPopMatrix();
     }
+
     //box texts
     for (int i = 0; i < 5; i++) {
 	s = &game->box[i];
-	unsigned int cref = 0x0000ff80;
-	r.left = s->center.y;
-	r.bot = s->center.x;
+	unsigned int cref = 0x00ffff00;
+	r.left = s->center.x;
+	r.bot = s->center.y - 5;
 	r.center = 1;
-	ggprint8b(&r, 16, cref, "testing");
+	if(i == 0 ) { ggprint8b(&r, 16, cref, "Requirements"); }
+	if(i == 1 ) { ggprint8b(&r, 16, cref, "Design"); }
+	if(i == 2 ) { ggprint8b(&r, 16, cref, "Coding"); }
+	if(i == 3 ) { ggprint8b(&r, 16, cref, "Testing"); }
+	if(i == 4 ) { ggprint8b(&r, 16, cref, "Maintenance"); }
     }
 
     //draw circle
@@ -391,9 +398,9 @@ void render(Game *game)
     }
     glPopMatrix();
 
-    /*r.bot = yres - 20;
+    r.bot = yres - 20;
     r.left = 10;
     r.center = 0;
     unsigned int cref = 0x00ffffff;
-    ggprint8b(&r, 16, cref, "Waterfall model");*/
+    ggprint8b(&r, 16, cref, "Waterfall model");
 }
