@@ -34,6 +34,9 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <GL/glx.h>
+extern "C" {
+    	#include "fonts.h"
+}
 
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
@@ -45,6 +48,8 @@
 Display *dpy;
 Window win;
 GLXContext glc;
+
+int xres = 800, yres = 600;
 
 //Structures
 
@@ -79,7 +84,7 @@ struct Game {
         //declare a box shape
         for(int i = 0; i < 5; i++){
             box[i].width = 100;
-            box[i].height = 12;
+            box[i].height = 15;
             box[i].center.x = 120 + i*65;
             box[i].center.y = 500 - i*60;
         }
@@ -282,8 +287,8 @@ void movement(Game *game)
                     	game->box[j].height) {
                 p->s.center.y = game->box[j].center.y + game->box[j].height +
 		    1.01;
-                p->velocity.x *= 1.01;
-                p->velocity.y *= rnd() * -0.5;
+                p->velocity.x += 0.06;
+                p->velocity.y *= rnd() * -0.3;
             }
         }
 
@@ -300,8 +305,8 @@ void movement(Game *game)
 		game->circle.radius + 1.01;
 
             //collision! apply penalty to the particle
-            p->velocity.x *= 1.01;
-            p->velocity.y *= rnd() * -0.5;
+            p->velocity.x += 0.06;
+            p->velocity.y *= rnd() * -0.3;
         }
 
         //check for off-screen
@@ -316,14 +321,15 @@ void movement(Game *game)
 
 void render(Game *game)
 {
+    Rect r;
     float w, h;
     glClear(GL_COLOR_BUFFER_BIT);
     //Draw shapes...
 
     //draw box
     Shape *s;
-    glColor3ub(90,140,90);
     for(int i = 0; i < 5 ; i++){
+    glColor3ub(90,140,90);
         s = &game->box[i];
         glPushMatrix();
         glTranslatef(s->center.x, s->center.y, s->center.z);
@@ -336,6 +342,15 @@ void render(Game *game)
         glVertex2i( w,-h);
         glEnd();
         glPopMatrix();
+    }
+    //box texts
+    for (int i = 0; i < 5; i++) {
+	s = &game->box[i];
+	unsigned int cref = 0x0000ff80;
+	r.left = s->center.y;
+	r.bot = s->center.x;
+	r.center = 1;
+	ggprint8b(&r, 16, cref, "testing");
     }
 
     //draw circle
@@ -351,6 +366,7 @@ void render(Game *game)
         }
         firsttime = 0;
     }
+    glColor3ub(90,140,90);
     glBegin(GL_TRIANGLE_FAN);
     for(int i = 0; i < n; i++) {
         glVertex2i(game->circle.center.x + vert[i].x,
@@ -374,4 +390,10 @@ void render(Game *game)
         glEnd();
     }
     glPopMatrix();
+
+    /*r.bot = yres - 20;
+    r.left = 10;
+    r.center = 0;
+    unsigned int cref = 0x00ffffff;
+    ggprint8b(&r, 16, cref, "Waterfall model");*/
 }
