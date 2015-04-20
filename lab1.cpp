@@ -351,13 +351,13 @@ void render(Game *game)
 	s = &game->box[i];
 	unsigned int cref = 0x00ffff00;
 	r.left = s->center.x;
-	r.bot = s->center.y - 5;
+	r.bot = s->center.y - 10;
 	r.center = 1;
-	if(i == 0 ) { ggprint8b(&r, 16, cref, "Requirements"); }
-	if(i == 1 ) { ggprint8b(&r, 16, cref, "Design"); }
-	if(i == 2 ) { ggprint8b(&r, 16, cref, "Coding"); }
-	if(i == 3 ) { ggprint8b(&r, 16, cref, "Testing"); }
-	if(i == 4 ) { ggprint8b(&r, 16, cref, "Maintenance"); }
+	if(i == 0 ) { ggprint16(&r, 16, cref, "Requirements"); }
+	if(i == 1 ) { ggprint16(&r, 16, cref, "Design"); }
+	if(i == 2 ) { ggprint16(&r, 16, cref, "Coding"); }
+	if(i == 3 ) { ggprint16(&r, 16, cref, "Testing"); }
+	if(i == 4 ) { ggprint16(&r, 16, cref, "Maintenance"); }
     }
 
     //draw circle
