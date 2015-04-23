@@ -33,6 +33,7 @@
 #include <cmath>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
+#include <X11/Xos.h>
 #include <GL/glx.h>
 extern "C" {
     	#include "fonts.h"
